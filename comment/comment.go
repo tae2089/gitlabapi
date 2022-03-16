@@ -1,30 +1,15 @@
-package main
+package comment
 
 import (
 	"bytes"
 	"fmt"
-	"github.com/joho/godotenv"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 	"os"
 )
 
-func main() {
-	err := godotenv.Load(".env")
-
-	if err != nil {
-		log.Panic("Error loading .env file")
-	}
-	data, err := ioutil.ReadFile("test.md")
-	if err != nil {
-		panic(err)
-	}
-	//
-	bodyData := url.Values{
-		"body": {string(data)},
-	}
+func GitIssueComment(bodyData url.Values) {
 	gitlabUrl := fmt.Sprintf("https://gitlab.com/api/v4/projects/%s/issues/%s/notes", os.Getenv("PROJECT"), os.Getenv("ISSUE"))
 	req, err := http.NewRequest("POST", gitlabUrl, bytes.NewBufferString(bodyData.Encode()))
 
